@@ -464,6 +464,7 @@
             .then(data => {
                 document.getElementById('editCompetitionId').value = competitionId;
                 const form = document.getElementById('editCompetitionForm');
+                form.action = `/edit-competition/${competitionId}/`;
                 form.querySelector('[name="name"]').value = data.name;
                 form.querySelector('[name="deadline"]').value = data.deadline;
                 form.querySelector('[name="prize_pool"]').value = data.prize_pool;
@@ -508,6 +509,34 @@
                 }
             }
         }
+    });
+
+    // Add this new code to handle form submission
+    document.getElementById('editCompetitionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = this;
+        const formData = new FormData(form);
+        const competitionId = document.getElementById('editCompetitionId').value;
+        
+        fetch(`/edit-competition/${competitionId}/`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                return response.json().then(data => {
+                    throw new Error(data.error);
+                });
+            }
+        })
+        .catch(error => {
+            alert('Error updating competition: ' + error.message);
+        });
     });
 </script>
 {% endblock %} 

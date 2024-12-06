@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 # from django.http import HttpResponse
 from .models import Room, Topic, Message, User, Tutorial, Team, Competition
 from .forms import RoomForm, UserForm, MyUserCreationForm, UserProfileForm, CompetitionForm
+import os
 
 # Create your views here.
 
@@ -456,11 +457,26 @@ def edit_competition(request, pk):
     if request.method == 'POST':
         form = CompetitionForm(request.POST, request.FILES, instance=competition)
         if form.is_valid():
-            form.save()
+            # Get the old image before saving
+            old_image = competition.image if competition.image else None
+            old_image_path = old_image.path if old_image else None
+            
+            # Save the competition
+            competition = form.save()
+            
+            # Handle image replacement
+            new_image = competition.image
+            if old_image and old_image_path and old_image != new_image:
+                if old_image.name != 'default_competition.jpg' and os.path.exists(old_image_path):
+                    os.remove(old_image_path)
+            
             messages.success(request, 'Competition updated successfully!')
             return redirect('manage-competitions')
+        else:
+            messages.error(request, 'Error updating competition. Please check your inputs.')
+            return JsonResponse({'error': form.errors}, status=400)
     
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 @login_required(login_url='login')
 def delete_competition(request, pk):
