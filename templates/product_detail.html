@@ -1,0 +1,111 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="product-container">
+    <div class="product-image">
+        <img src="{% static 'images/shop/products/'|add:product.image %}" alt="{{ product.name }}">
+    </div>
+    <div class="product-details">
+        <h1>{{ product.name }}</h1>
+        <p class="price">{{ product.price }}</p>
+        <p>SHIPPING CALCULATED AT CHECKOUT.</p>
+        <hr>
+        <h2>SIZE</h2>
+        <div class="size-buttons">
+            <button class="size-button">XS</button>
+            <button class="size-button">S</button>
+            <button class="size-button">M</button>
+            <button class="size-button">L</button>
+            <button class="size-button">XL</button>
+        </div>
+        <a href="#" class="size-chart">Size Chart</a>
+        <button class="add-to-cart">NOTIFY TEAM VENDOR</button>
+        <div class="product-info">
+            <p>★ 100% HEAVYWEIGHT COTTON HOODIE (15 OZ)</p>
+            <p>★ MACHINE WASH COLD, INSIDE OUT; TUMBLE DRY LOW</p>
+            <p>★ MODEL IS 6'2" AND WEARING A LARGE</p>
+            <p class="shipping-days">THIS ITEM WILL SHIP IN 5-7 BUSINESS DAYS.</p>
+        </div>
+        <a href="{% url 'team-shop' team_id %}" class="back-button">BACK TO SHOP ALL</a>
+    </div>
+</div>
+
+<!-- Size Chart Modal -->
+<div id="sizeChartModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Hoodie Size Chart</h2>
+            <span class="close">&times;</span>
+        </div>
+        <hr class="title-divider">
+        <div class="subheading-container">
+            <h3>PRODUCT MEASUREMENTS</h3>
+            <div class="unit-toggle">
+                <button id="inchesBtn" class="active">INCHES</button>
+                <button id="cmBtn">CENTIMETERS</button>
+            </div>
+        </div>
+        <div class="image-container">
+            <img id="sizeChartImage" src="{% static 'images/HoodieINCHES.png' %}" alt="Size Chart">
+        </div>
+        <hr class="measure-divider">
+        <h3 class="measure-heading">HOW TO MEASURE</h3>
+        <div class="image-container">
+            <img src="{% static 'images/HowToMeasure.png' %}" alt="How to Measure">
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Size Chart Modal
+        const modal = document.getElementById('sizeChartModal');
+        const sizeChartLink = document.querySelector('.size-chart');
+        const closeBtn = document.querySelector('.close');
+        const inchesBtn = document.getElementById('inchesBtn');
+        const cmBtn = document.getElementById('cmBtn');
+        const sizeChartImage = document.getElementById('sizeChartImage');
+
+        sizeChartLink.onclick = function(e) {
+            e.preventDefault();
+            modal.style.display = 'block';
+            document.body.classList.add('modal-open');
+        }
+
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
+
+        window.onclick = function(e) {
+            if (e.target == modal) {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+        // Size Selection
+        const sizeButtons = document.querySelectorAll('.size-button');
+        sizeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                sizeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        // Unit Toggle
+        inchesBtn.onclick = function() {
+            inchesBtn.classList.add('active');
+            cmBtn.classList.remove('active');
+            sizeChartImage.src = "{% static 'images/HoodieINCHES.png' %}";
+        }
+
+        cmBtn.onclick = function() {
+            cmBtn.classList.add('active');
+            inchesBtn.classList.remove('active');
+            sizeChartImage.src = "{% static 'images/HoodieCM.png' %}";
+        }
+    });
+</script>
+{% endblock %} 

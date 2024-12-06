@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-SHIRT - vee-n0ught</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="scripts.js"></script>
+    <script src="currency-converter.js" defer></script>
+</head>
+<body>
+    <header class="sticky-header">
+        <nav class="nav-links">
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="shop.html">SHOP ALL</a></li>
+                <li><a href="gift.html">GIFT</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+            </ul>
+        </nav>
+
+        <div class="logo-container">
+            <img src="images/logo.png" alt="v0 logo" class="logo">
+        </div>
+
+        <div class="icons">
+            <a href="#" class="search-icon"><i class="fas fa-search"></i></a>
+            <a href="#" class="profile-icon"><i class="fa-solid fa-user"></i></a>
+        </div>
+
+        <div class="currency-selector">
+            <select id="currency-select">
+                <option value="USD">🇺🇸 United States Dollar (USD $)</option>
+                <option value="EUR">🇪🇺 Euro (EUR €)</option>
+                <option value="GBP">🇬🇧 British Pound Sterling (GBP £)</option>
+                <option value="JPY">🇯🇵 Japanese Yen (JPY ¥)</option>
+                <option value="CAD">🇨🇦 Canadian Dollar (CAD $)</option>
+                <option value="AUD">🇦🇺 Australian Dollar (AUD $)</option>
+                <option value="CHF">🇨🇭 Swiss Franc (CHF Fr)</option>
+                <option value="CNY">🇨🇳 Chinese Yuan (CNY ¥)</option>
+            </select>
+        </div> 
+    </header>
+
+    <div class="product-container">
+        <div class="product-image">
+            <img src="images/1000x1333xT-Shirt.jpg" alt="T-SHIRT">
+        </div>
+        <div class="product-details">
+            <h1>T-SHIRT</h1>
+            <p class="price" data-price="38.00">$38.00</p>
+            <p>SHIPPING CALCULATED AT CHECKOUT.</p>
+            <hr>
+            <h2>SIZE</h2>
+            <div class="size-buttons">
+                <button class="size-button">XS</button>
+                <button class="size-button">S</button>
+                <button class="size-button">M</button>
+                <button class="size-button">L</button>
+                <button class="size-button">XL</button>
+            </div>
+            <a href="#" class="size-chart">Size Chart</a>
+            <button class="add-to-cart">ADD TO CART</button>
+            <div class="product-info">
+                <p>✴ 100% COTTON T-SHIRT</p>
+                <p>✴ MACHINE WASH COLD, TUMBLE DRY LOW</p>
+                <p>✴ MODEL IS 6'0" AND WEARING A MEDIUM</p>
+                <p>THIS ITEM WILL SHIP IN 3-5 BUSINESS DAYS.</p>
+            </div>
+            <a href="shop.html" class="back-button">BACK TO SHOP ALL</a>
+        </div>
+    </div>
+
+    <div id="sizeChartModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">T-Shirt Size Chart</h2>
+                <span class="close">&times;</span>
+            </div>
+            <hr class="title-divider">
+            <div class="subheading-container">
+                <h3>PRODUCT MEASUREMENTS</h3>
+                <div class="unit-toggle">
+                    <button id="inchesBtn" class="active">INCHES</button>
+                    <button id="cmBtn">CENTIMETERS</button>
+                </div>
+            </div>
+            <div class="image-container">
+                <img id="sizeChartImage" src="images/T-ShirtINCHES.png" alt="Size Chart">
+            </div>
+            <hr class="measure-divider">
+            <h3 class="measure-heading">HOW TO MEASURE</h3>
+            <div class="image-container">
+                <img src="images/HowToMeasure.png" alt="How to Measure">
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-top">
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="vee-n0ught logo">
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="main-menu">
+                        <h3>MAIN MENU</h3>
+                        <hr>
+                        <ul>
+                            <li><a href="index.html">HOME</a></li>
+                            <li><a href="shop.html">SHOP ALL</a></li>
+                            <li><a href="gift.html">PROFILE</a></li>
+                            <li><a href="contact.html">CONTACT</a></li>
+                        </ul>
+                    </div>
+                    <div class="support">
+                        <h3>SUPPORT</h3>
+                        <hr>
+                        <ul>
+                            <li><a href="#">PRIVACY POLICY</a></li>
+                            <li><a href="#">TERMS OF SERVICE</a></li>
+                            <li><a href="#">INTEGRITY POLICY</a></li>
+                            <li><a href="#">FAQS</a></li>
+                        </ul>
+                    </div>
+                    <div class="newsletter">
+                        <h3>STAY UPDATED </h3>
+                        <hr>
+                        <p>SUBSCRIBE TO GET COMPETITION RESULTS, NEW EVENTS, AND NEWSLETTERS.</p>
+                        <form>
+                            <div class="email-input">
+                                <input type="email" placeholder="Enter your email">
+                                <button type="submit">➤</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="footer-divider">
+        <div class="copyright">
+            © 2024 Niner Plaza. ALL RIGHTS RESERVED. POWERED BY <strong>TEAM 2, INC.</strong>
+            <p>Exchange rates provided by <a href="https://www.exchangerate-api.com">ExchangeRate-API</a></p>
+        </div>
+    </footer>
+</body>
+</html>

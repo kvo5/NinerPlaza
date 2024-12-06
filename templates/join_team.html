@@ -1,0 +1,314 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load team_tags %}
+
+{% block content %}
+<div class="teams-container">
+    <h1 class="teams-title">Choose Your Faction</h1>
+    
+    <div class="teams-list">
+        {% for team in teams %}
+        <div class="team-card {% if user_team == team %}active{% endif %}">
+            <div class="team-portrait">
+                <img src="{% static 'images/'|add:team.image %}" alt="{{ team.name }}" onerror="console.log('Failed to load image:', '{% static 'images/'|add:team.image %}')">
+            </div>
+            <div class="team-content">
+                <div class="team-details">
+                    <h2>{{ team.name }}</h2>
+                    <p>{{ team.description }}</p>
+                </div>
+                <div class="team-members">
+                    {% with member_count=team.get_member_count %}
+                    {% with empty_slots=team.max_members|subtract:member_count %}
+                        {% for member in team.get_members_by_join_date %}
+                            <div class="avatar-tooltip">
+                                <a href="{% url 'user-profile' member.id %}" class="member-avatar" data-username="@{{ member.username }}">
+                                    <img src="{{ member.avatar.url }}" alt="{{ member.username }}">
+                                </a>
+                                <span class="tooltip-text">@{{ member.username }}</span>
+                            </div>
+                        {% endfor %}
+                        {% for i in empty_slots|get_range %}
+                            <div class="member-avatar empty"></div>
+                        {% endfor %}
+                    {% endwith %}
+                    {% endwith %}
+                </div>
+                <div class="team-footer">
+                    <div class="member-count">
+                        {{ team.get_member_count }} / {{ team.max_members }} Members
+                    </div>
+                    <form method="POST" class="team-actions">
+                        {% csrf_token %}
+                        <input type="hidden" name="team_id" value="{{ team.id }}">
+                        {% if user_team == team %}
+                            <button type="submit" name="action" value="leave" class="btn btn--dark">Leave Team</button>
+                        {% else %}
+                            <button type="submit" name="action" value="join" class="btn btn--main" 
+                                    {% if team.get_member_count >= team.max_members %}disabled{% endif %}>
+                                Join Team
+                            </button>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .teams-container {
+        margin-top: 150px;
+        padding: 0 40px;
+        max-width: 1600px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .teams-title {
+        color: var(--color-main);
+        font-size: 32px;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+    .teams-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .team-card {
+        display: flex;
+        background-color: var(--color-dark);
+        border: 1px solid var(--color-dark-medium);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        min-height: 200px;
+    }
+
+    .team-card:hover {
+        transform: translateX(10px);
+        border-color: var(--color-main);
+        box-shadow: 0 0 20px rgba(179, 163, 105, 0.2);
+    }
+
+    .team-card.active {
+        border: 2px solid var(--color-main);
+    }
+
+    .team-portrait {
+        width: 300px;
+        min-width: 300px;
+        height: auto;
+        min-height: 200px;
+        border-right: 1px solid var(--color-dark-medium);
+        background-color: var(--color-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 20px;
+    }
+
+    .team-portrait img {
+        max-width: 100%;
+        width: auto;
+        height: auto;
+        max-height: 160px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+    }
+
+    .team-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 25px;
+        border-left: 1px solid var(--color-dark-medium);
+        margin-left: -1px;
+    }
+
+    .team-details h2 {
+        color: var(--color-main);
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .team-details p {
+        color: var(--color-light);
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        max-width: 800px;
+    }
+
+    .team-members {
+        display: flex;
+        gap: 10px;
+        margin: 20px 0;
+        align-items: center;
+    }
+
+    .member-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: var(--color-dark-medium);
+        border: 2px solid var(--color-dark-light);
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .member-avatar:hover {
+        transform: scale(1.1);
+        border-color: var(--color-main);
+    }
+
+    .member-avatar:hover::after {
+        content: attr(data-username);
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: var(--color-dark);
+        color: var(--color-light);
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 1.2rem;
+        white-space: nowrap;
+        z-index: 1000;
+        border: 1px solid var(--color-dark-medium);
+    }
+
+    .member-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .member-avatar.empty {
+        border: 2px dashed var(--color-dark-light);
+        opacity: 0.3;
+        cursor: default;
+    }
+
+    .member-avatar.empty:hover {
+        transform: none;
+        border-color: var(--color-dark-light);
+    }
+
+    .team-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+    }
+
+    .member-count {
+        color: var(--color-light-gray);
+        font-size: 14px;
+        background-color: var(--color-dark-medium);
+        padding: 8px 16px;
+        border-radius: 4px;
+    }
+
+    .team-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 10px 24px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn--main {
+        background-color: var(--color-main);
+        color: var(--color-dark);
+        border: none;
+    }
+
+    .btn--main:hover {
+        background-color: var(--color-main-light);
+    }
+
+    .btn--dark {
+        background-color: var(--color-dark-medium);
+        color: var(--color-light);
+        border: none;
+    }
+
+    .btn--dark:hover {
+        background-color: var(--color-error);
+        color: var(--color-light);
+    }
+
+    .btn[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Add tooltip styles */
+    .avatar-tooltip {
+        position: relative;
+        display: inline-block;
+    }
+
+    .avatar-tooltip .tooltip-text {
+        visibility: hidden;
+        background-color: var(--color-dark);
+        color: var(--color-light);
+        text-align: center;
+        padding: 5px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--color-main);
+        font-size: 1.4rem;
+        
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        
+        /* Add animation */
+        opacity: 0;
+        transition: opacity 0.3s;
+        
+        /* Prevent tooltip from breaking into multiple lines */
+        white-space: nowrap;
+    }
+
+    /* Add arrow to tooltip */
+    .avatar-tooltip .tooltip-text::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: var(--color-main) transparent transparent transparent;
+    }
+
+    /* Show tooltip on hover */
+    .avatar-tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+{% endblock %} 

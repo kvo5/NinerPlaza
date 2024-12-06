@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="team-shop-container">
+    <a href="{% url 'shop' %}" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Back to Teams
+    </a>
+
+    <div class="product-carousel">
+        <button class="carousel-nav prev">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="product-track">
+            {% for product in team_data.products %}
+            <div class="product-card {% if forloop.counter == 2 %}active{% endif %}"
+                 onclick="window.location.href='{% url 'product-detail' team_id product.id %}'"
+                 style="cursor: pointer">
+                <img src="{% static 'images/shop/products/'|add:product.image %}" alt="{{ product.name }}">
+                <div class="product-info">
+                    <h3>{{ product.name }}</h3>
+                    <p class="price">{{ product.price }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <button class="carousel-nav next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>
+{% endblock %} 

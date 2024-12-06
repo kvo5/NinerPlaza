@@ -1,0 +1,316 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <img src="{{ user.avatar.url }}" alt="{{ user.name }}">
+            </div>
+            <div class="profile-info">
+                <h1>{{ user.name|default:user.username }}</h1>
+                <p class="headline">{{ user.headline|default:"No headline set" }}</p>
+                <p class="location">
+                    {% if user.location %}
+                        <i class="fas fa-map-marker-alt"></i> {{ user.location }}
+                    {% endif %}
+                </p>
+            </div>
+            {% if request.user == user %}
+            <div class="profile-actions">
+                <a href="{% url 'edit-profile' %}" class="btn btn--main">Edit Profile</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="profile-section">
+            <h2>About</h2>
+            <p>{{ user.bio|default:"No bio yet." }}</p>
+        </div>
+
+        {% if user.resume %}
+        <div class="profile-section">
+            <h2>Resume</h2>
+            <div class="resume-container">
+                <div class="resume-preview">
+                    <iframe 
+                        src="https://mozilla.github.io/pdf.js/web/viewer.html?file={{ request.scheme }}://{{ request.get_host }}{{ user.resume.url }}"
+                        width="100%"
+                        height="600px"
+                        frameborder="0"
+                    ></iframe>
+                </div>
+                <div class="resume-actions">
+                    <a href="{{ user.resume.url }}" target="_blank" class="btn btn--main resume-view">
+                        <i class="fas fa-eye"></i> View Resume
+                    </a>
+                    <a href="{{ user.resume.url }}" download class="btn btn--main resume-download">
+                        <i class="fas fa-download"></i> Download Resume
+                    </a>
+                    {% if user.resume_updated %}
+                    <span class="resume-updated">Last updated: {{ user.resume_updated|date:"M d, Y" }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="profile-section">
+            <h2>Social Links</h2>
+            <div class="social-links">
+                {% if user.website %}
+                <a href="{{ user.website }}" target="_blank" class="social-link">
+                    <i class="fas fa-globe"></i> Website
+                </a>
+                {% endif %}
+                {% if user.github %}
+                <a href="{{ user.github }}" target="_blank" class="social-link">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                {% endif %}
+                {% if user.linkedin %}
+                <a href="{{ user.linkedin }}" target="_blank" class="social-link">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if user.teams.all %}
+        <div class="profile-section">
+            <h2>Current Team</h2>
+            {% for membership in user.teammembership_set.all %}
+            <div class="team-info">
+                <img src="{% static 'images/'|add:membership.team.image %}" alt="{{ membership.team.name }}">
+                <div>
+                    <h3>{{ membership.team.name }}</h3>
+                    <p>Joined {{ membership.joined_at|date }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .profile-container {
+        margin-top: 140px;
+        padding: 0 40px;
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 50px;
+    }
+
+    .profile-card {
+        background-color: var(--color-dark);
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 30px;
+        margin-bottom: 40px;
+        position: relative;
+    }
+
+    .profile-avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 4px solid var(--color-main);
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile-info {
+        flex: 1;
+    }
+
+    .profile-info h1 {
+        color: var(--color-main);
+        font-size: 2.4rem;
+        margin-bottom: 10px;
+    }
+
+    .headline {
+        color: var(--color-light);
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+    }
+
+    .location {
+        color: var(--color-light-gray);
+        font-size: 1.4rem;
+    }
+
+    .profile-actions {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .profile-section {
+        padding: 30px 0;
+        border-top: 1px solid var(--color-dark-medium);
+    }
+
+    .profile-section h2 {
+        color: var(--color-main);
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    .profile-section p {
+        color: var(--color-light);
+        font-size: 1.4rem;
+        line-height: 1.6;
+    }
+
+    .skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .skill-tag {
+        background-color: var(--color-dark-medium);
+        color: var(--color-light);
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 1.2rem;
+    }
+
+    .social-links {
+        display: flex;
+        gap: 20px;
+    }
+
+    .social-link {
+        color: var(--color-light);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1.4rem;
+        transition: color 0.3s ease;
+    }
+
+    .social-link:hover {
+        color: var(--color-main);
+    }
+
+    .team-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        background-color: var(--color-dark-medium);
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .team-info img {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+    }
+
+    .team-info h3 {
+        color: var(--color-main);
+        font-size: 1.6rem;
+        margin-bottom: 5px;
+    }
+
+    .team-info p {
+        color: var(--color-light-gray);
+        font-size: 1.2rem;
+    }
+
+    .resume-container {
+        background-color: var(--color-dark-medium);
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 15px;
+        max-height: calc(100vh - 320px);
+        min-height: 550px;
+    }
+
+    .resume-preview {
+        background-color: white;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 20px;
+        height: calc(100vh - 420px);
+        min-height: 450px;
+    }
+
+    .resume-preview iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        scroll-behavior: smooth;
+    }
+
+    .resume-actions {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 15px;
+        margin-top: 15px;
+        padding: 0 10px;
+    }
+
+    .resume-view,
+    .resume-download {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background-color: var(--color-main);
+        color: var(--color-dark);
+        border-radius: 5px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .resume-view:hover,
+    .resume-download:hover {
+        background-color: var(--color-main-light);
+    }
+
+    .resume-view i,
+    .resume-download i {
+        font-size: 1.6rem;
+    }
+
+    .resume-updated {
+        color: var(--color-light-gray);
+        font-size: 1.4rem;
+        margin-left: auto;
+    }
+</style>
+
+<script>
+    // Add loading indicator
+    document.addEventListener('DOMContentLoaded', function() {
+        const iframe = document.querySelector('.resume-preview iframe');
+        if (iframe) {
+            iframe.onload = function() {
+                this.style.opacity = '1';
+            };
+            iframe.style.opacity = '0';
+            iframe.style.transition = 'opacity 0.3s ease';
+        }
+    });
+</script>
+{% endblock %} 

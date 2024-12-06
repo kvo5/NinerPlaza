@@ -1,0 +1,56 @@
+{% load static %}
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-top">
+            <div class="footer-logo">
+                <img src="{% static 'images/logo.png' %}" alt="NinerPlaza logo">
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="main-menu">
+                    <h3>MAIN MENU</h3>
+                    <hr>
+                    <ul>
+                        <li><a href="{% url 'landing' %}">HOME</a></li>
+                        <li><a href="{% url 'shop' %}">SHOP ALL</a></li>
+                        <li><a href="{% url 'home' %}">NETWORK</a></li>
+                        <li><a href="{% url 'contact' %}">CONTACT</a></li>
+                        <li><a href="{% url 'tutorials' %}">TUTORIALS</a></li>
+                    </ul>
+                </div>
+                <div class="support">
+                    <h3>SUPPORT</h3>
+                    <hr>
+                    <ul>
+                        <li><a href="#">PRIVACY POLICY</a></li>
+                        <li><a href="{% url 'terms' %}">TERMS OF SERVICE</a></li>
+                        <li><a href="#">INTEGRITY POLICY</a></li>
+                        <li><a href="#">FAQS</a></li>
+                    </ul>
+                </div>
+                <div class="newsletter">
+                    <h3>STAY UPDATED</h3>
+                    <hr>
+                    <p>SUBSCRIBE TO GET COMPETITION RESULTS, NEW EVENTS, AND NEWSLETTERS.</p>
+                    <form>
+                        <div class="email-input">
+                            <input type="email" placeholder="Enter your email">
+                            <button type="submit">➤</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="footer-divider">
+    <div class="copyright">
+        <p>© 2024 Niner Plaza. ALL RIGHTS RESERVED. POWERED BY <strong>TEAM 2, INC.</strong></p>
+        <p>Exchange rates provided by <a href="https://www.exchangerate-api.com">ExchangeRate-API</a></p>
+    </div>
+</footer> 

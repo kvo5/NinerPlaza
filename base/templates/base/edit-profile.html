@@ -1,0 +1,313 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="edit-header">
+            <h1>Edit Profile</h1>
+            <a href="{% url 'profile' %}" class="btn btn--cancel">Cancel</a>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="edit-form">
+            {% csrf_token %}
+
+            <div class="form-section">
+                <h2>Basic Information</h2>
+                <div class="form-group avatar-group">
+                    <label>Profile Picture</label>
+                    <div class="file-input-container">
+                        <div class="avatar-preview">
+                            <img id="avatar-preview" src="{{ user.avatar.url }}" alt="Profile Picture">
+                        </div>
+                        <div class="file-input-wrapper">
+                            <span>Currently: {{ user.avatar.name }}</span>
+                            {{ form.avatar }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Name</label>
+                    {{ form.name }}
+                </div>
+
+                <div class="form-group">
+                    <label>Headline</label>
+                    {{ form.headline }}
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    {{ form.location }}
+                </div>
+
+                <div class="form-group">
+                    <label>Resume (PDF only, max 5MB)</label>
+                    <div class="file-input-container">
+                        {% if user.resume %}
+                        <div class="current-resume">
+                            <div class="resume-info">
+                                <span>Current: {{ user.resume.name|slice:"8:" }}</span>
+                                {% if user.resume_updated %}
+                                <span class="upload-date">Uploaded: {{ user.resume_updated|date:"M d, Y" }}</span>
+                                {% endif %}
+                            </div>
+                            <button type="button" class="btn btn--dark remove-resume" onclick="document.getElementById('remove-resume-form').submit();">
+                                <i class="fas fa-trash"></i> Remove Resume
+                            </button>
+                        </div>
+                        {% endif %}
+                        {{ form.resume }}
+                    </div>
+                    {% if form.resume.errors %}
+                    <div class="error-message">
+                        {{ form.resume.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>About You</h2>
+                <div class="form-group">
+                    <label>Bio</label>
+                    {{ form.bio }}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Social Links</h2>
+                <div class="form-group">
+                    <label>Website</label>
+                    {{ form.website }}
+                </div>
+
+                <div class="form-group">
+                    <label>GitHub</label>
+                    {{ form.github }}
+                </div>
+
+                <div class="form-group">
+                    <label>LinkedIn</label>
+                    {{ form.linkedin }}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn--main">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<form id="remove-resume-form" method="POST" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="remove_resume">
+</form>
+
+<style>
+    .profile-container {
+        margin-top: 150px;
+        padding: 0 40px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 50px;
+    }
+
+    .profile-card {
+        background-color: var(--color-dark);
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .edit-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .edit-header h1 {
+        color: var(--color-main);
+        font-size: 2.4rem;
+    }
+
+    .form-section {
+        margin-bottom: 40px;
+    }
+
+    .form-section h2 {
+        color: var(--color-main);
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--color-dark-medium);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        color: var(--color-light);
+        margin-bottom: 8px;
+        font-size: 1.4rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: var(--color-dark-medium);
+        border: 1px solid var(--color-dark-light);
+        color: var(--color-light);
+        font-size: 1.4rem;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--color-main);
+    }
+
+    .avatar-group {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .avatar-preview {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid var(--color-main);
+        flex-shrink: 0;
+    }
+
+    .file-input-container {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        flex: 1;
+    }
+
+    .file-input-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .file-input-wrapper span {
+        color: var(--color-light-gray);
+        font-size: 1.2rem;
+    }
+
+    input[type="file"] {
+        width: 100%;
+        padding: 8px;
+        background-color: var(--color-dark-medium);
+        border: 1px solid var(--color-dark-light);
+        border-radius: 5px;
+        color: var(--color-light);
+        cursor: pointer;
+    }
+
+    input[type="file"]::-webkit-file-upload-button {
+        background-color: var(--color-dark-light);
+        color: var(--color-light);
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        margin-right: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    input[type="file"]::-webkit-file-upload-button:hover {
+        background-color: var(--color-main);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid var(--color-dark-medium);
+    }
+
+    /* Error messages */
+    .errorlist {
+        color: #ff6b6b;
+        list-style: none;
+        padding: 0;
+        margin: 5px 0;
+        font-size: 1.2rem;
+    }
+
+    .current-resume {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--color-dark-medium);
+        padding: 12px 15px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .resume-info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .upload-date {
+        font-size: 1.2rem;
+        color: var(--color-light-gray);
+    }
+
+    .remove-resume {
+        padding: 8px 12px;
+        font-size: 1.3rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .remove-resume:hover {
+        background-color: var(--color-error);
+        border-color: var(--color-error);
+    }
+
+    .remove-resume i {
+        font-size: 1.4rem;
+    }
+
+    .error-message {
+        color: var(--color-error);
+        font-size: 1.2rem;
+        margin-top: 5px;
+    }
+</style>
+
+<script>
+    // Preview uploaded avatar
+    document.getElementById('id_avatar').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('avatar-preview').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+{% endblock %} 

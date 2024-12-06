@@ -1,0 +1,80 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block body_class %}shop-page{% endblock %}
+
+{% block content %}
+{% include 'banner.html' %}
+<div class="shop-container">
+    <!-- Hero Section -->
+    <section class="shop-hero">
+        <img src="{% static 'images/shop/shop-hero.jpg' %}" alt="Shop Banner">
+        <div class="shop-hero__content">
+            <h1>Support Student Entrepreneurs</h1>
+            <p>Purchase merchandise to help fund innovative startup projects</p>
+        </div>
+    </section>
+
+    <!-- Teams Grid -->
+    <section class="teams-grid">
+        <h2>Featured Teams</h2>
+        <div class="teams-container">
+            <!-- Team 1 -->
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'images/shop/team1.jpg' %}" alt="EcoTech Solutions">
+                    <div class="team-overlay">
+                        <a href="{% url 'team-shop' 1 %}" class="btn btn--main">View Collection</a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>EcoTech Solutions</h3>
+                    <p>Sustainable technology for everyday life</p>
+                </div>
+            </div>
+
+            <!-- Team 2 -->
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'images/shop/team2.jpg' %}" alt="HealthHub">
+                    <div class="team-overlay">
+                        <a href="{% url 'team-shop' 2 %}" class="btn btn--main">View Collection</a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>HealthHub</h3>
+                    <p>Innovative healthcare solutions</p>
+                </div>
+            </div>
+
+            <!-- Team 3 -->
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'images/shop/team3.jpg' %}" alt="FinTech Pioneers">
+                    <div class="team-overlay">
+                        <a href="{% url 'team-shop' 3 %}" class="btn btn--main">View Collection</a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>FinTech Pioneers</h3>
+                    <p>Revolutionizing financial technology</p>
+                </div>
+            </div>
+
+            <!-- Team 4 -->
+            <div class="team-card">
+                <div class="team-image">
+                    <img src="{% static 'images/shop/team4.jpg' %}" alt="AI Innovators">
+                    <div class="team-overlay">
+                        <a href="{% url 'team-shop' 4 %}" class="btn btn--main">View Collection</a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>AI Innovators</h3>
+                    <p>Artificial Intelligence solutions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %} 

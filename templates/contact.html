@@ -1,0 +1,52 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="contact-container">
+    <div class="contact-box">
+        <h1>Contact Us</h1>
+        <p class="contact-description">Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+        
+        <form class="contact-form" action="mailto:kvo5@uncc.edu" method="GET" enctype="text/plain">
+            <div class="form__group">
+                <label for="subject">Subject</label>
+                <input 
+                    type="text" 
+                    name="subject" 
+                    id="subject" 
+                    placeholder="Enter subject"
+                    required
+                />
+            </div>
+
+            <div class="form__group">
+                <label for="message">Message</label>
+                <textarea 
+                    name="body" 
+                    id="message" 
+                    placeholder="Your message here..."
+                    required
+                ></textarea>
+            </div>
+
+            <div class="form__action">
+                <button class="btn btn--main" type="submit">Send Message</button>
+            </div>
+        </form>
+
+        <div class="contact-info">
+            <h3>Other Ways to Connect</h3>
+            <div class="contact-links">
+                <a href="https://linkedin.com" target="_blank" class="social-link">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+                <a href="https://twitter.com" target="_blank" class="social-link">
+                    <i class="fab fa-twitter"></i> Twitter
+                </a>
+                <a href="https://instagram.com" target="_blank" class="social-link">
+                    <i class="fab fa-instagram"></i> Instagram
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

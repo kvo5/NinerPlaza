@@ -1,0 +1,50 @@
+{% load static %}
+
+<header class="sticky-header">
+    <nav class="nav-links">
+        <ul>
+            <li><a href="{% url 'landing' %}" class="{% if request.path == '/' %}active{% endif %}">HOME</a></li>
+            <li><a href="{% url 'shop' %}" class="{% if 'shop' in request.path %}active{% endif %}">SHOP ALL</a></li>
+            <li><a href="{% url 'home' %}" class="{% if 'network' in request.path %}active{% endif %}">NETWORK</a></li>
+            <li><a href="{% url 'contact' %}" class="{% if 'contact' in request.path %}active{% endif %}">CONTACT</a></li>
+            <li><a href="{% url 'tutorials' %}" class="{% if 'tutorials' in request.path %}active{% endif %}">TUTORIALS</a></li>
+        </ul>
+    </nav>
+
+    <div class="logo-container">
+        <a href="{% url 'landing' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+        </a>
+    </div>
+
+    <div class="header__menu">
+        {% if request.user.is_authenticated %}
+        <nav class="nav-links right-nav">
+            <ul>
+                <li><a href="{% url 'join-team' %}" class="{% if 'join-team' in request.path %}active{% endif %}">JOIN TEAM</a></li>
+                <li><a href="{% url 'profile' %}" class="{% if 'profile' in request.path %}active{% endif %}">PROFILE</a></li>
+            </ul>
+        </nav>
+        <div>
+            <a href="{% url 'update-user' %}">
+                <div class="avatar avatar--medium">
+                    <img src="{{request.user.avatar.url}}" />
+                </div>
+                <p>{{request.user.username}} <span>@{{request.user.username}}</span></p>
+            </a>
+            <button class="dropdown-button" data-dropdown="#dropdown-menu">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                    <title>chevron-down</title>
+                    <path d="M16 21l-13-13h-3l16 16 16-16h-3l-13 13z"></path>
+                </svg>
+            </button>
+            <div class="dropdown-menu" id="dropdown-menu">
+                <a href="{% url 'update-user' %}">Edit Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </div>
+        </div>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn btn--main">Login</a>
+        {% endif %}
+    </div>
+</header> 

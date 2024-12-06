@@ -1,0 +1,329 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="landing-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background">
+            <img src="{% static 'images/hero-banner.jpg' %}" alt="Hero Banner">
+            <div class="hero-overlay"></div>
+        </div>
+        
+        <div class="hero-content">
+            <h1 class="hero-title">Welcome to NinerPlaza</h1>
+            <p class="hero-tagline">Connect, Create, and Compete with Fellow Student Entrepreneurs</p>
+            <div class="hero-cta">
+                <a href="{% url 'login' %}" class="btn btn--main">Get Started</a>
+                <button class="btn btn--dark" onclick="scrollToCompetitions()">View Competitions</button>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-value" data-value="{{ user_count }}">0</div>
+                    <div class="stat-label">Registered Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" data-value="{{ competition_count }}">0</div>
+                    <div class="stat-label">Active Competitions</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" data-prefix="$" data-value="{{ total_prize_pool }}">0</div>
+                    <div class="stat-label">Total Prize Pool</div>
+                </div>
+            </div>
+
+            <div class="scroll-indicator">
+                <span class="scroll-text">Scroll to explore</span>
+                <div class="mouse">
+                    <div class="mouse-wheel"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="main-content">
+        <!-- Competition Carousel -->
+        <section id="competitions" class="carousel-section">
+            <h2>Featured Competitions</h2>
+            
+            <div class="carousel-container">
+                <button class="carousel-nav prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="carousel">
+                    {% for competition in competitions %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="competition-card {% if competition.is_ending_soon %}ending-soon{% endif %}">
+                            <img src="{{ competition.image.url }}" alt="{{ competition.name }}">
+                            <div class="competition-info">
+                                <div class="competition-content">
+                                    <div class="competition-header">
+                                        <h3>{{ competition.name }}</h3>
+                                    </div>
+                                    <div class="competition-meta">
+                                        <div class="meta-left">
+                                            <p class="competition-deadline">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                Deadline: {{ competition.deadline|date:"M d, Y" }}
+                                            </p>
+                                            <p class="competition-prize">
+                                                <i class="fas fa-trophy"></i>
+                                                Prize Pool: <span class="prize-amount">${{ competition.prize_pool }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <p class="competition-desc">{{ competition.description }}</p>
+                                    <a href="{{ competition.website_link }}" target="_blank" class="btn btn--main">Learn More</a>
+                                </div>
+                                <div class="sponsor-section">
+                                    <a href="{% url 'view-profile' competition.sponsor.id %}" class="sponsor-link">
+                                        <img src="{{ competition.sponsor.avatar.url }}" alt="{{ competition.sponsor.username }}">
+                                        <span class="sponsor-name">{{ competition.sponsor.username }}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="carousel-item active">
+                        <div class="competition-card">
+                            <img src="{% static 'images/default_competition.jpg' %}" alt="No Competitions">
+                            <div class="competition-info">
+                                <h3>No Active Competitions</h3>
+                                <p class="competition-desc">Check back later for upcoming competitions!</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <button class="carousel-nav next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            {% if request.user.is_sponsor %}
+            <div class="competition-actions">
+                <a href="{% url 'manage-competitions' %}" class="btn btn--main">
+                    <i class="fas fa-cog"></i> Manage My Competitions
+                </a>
+            </div>
+            {% endif %}
+        </section>
+    </div>
+
+    <!-- Sponsors section moved down -->
+    <section class="sponsors-section">
+        <h2 class="sponsors-title">Our Valued Sponsors</h2>
+        <div class="sponsors-marquee">
+            <div class="sponsors-track">
+                <div class="sponsor-group">
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor1.png' %}" alt="Sponsor 1">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor2.png' %}" alt="Sponsor 2">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor3.png' %}" alt="Sponsor 3">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor4.png' %}" alt="Sponsor 4">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor5.png' %}" alt="Sponsor 5">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor6.png' %}" alt="Sponsor 6">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor7.png' %}" alt="Sponsor 7">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor8.png' %}" alt="Sponsor 8">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor9.png' %}" alt="Sponsor 9">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor10.png' %}" alt="Sponsor 10">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor11.png' %}" alt="Sponsor 11">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor12.png' %}" alt="Sponsor 12">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor13.png' %}" alt="Sponsor 13">
+                    </div>
+                </div>
+                <div class="sponsor-group">
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor1.png' %}" alt="Sponsor 1">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor2.png' %}" alt="Sponsor 2">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor3.png' %}" alt="Sponsor 3">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor4.png' %}" alt="Sponsor 4">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor5.png' %}" alt="Sponsor 5">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor6.png' %}" alt="Sponsor 6">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor7.png' %}" alt="Sponsor 7">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor8.png' %}" alt="Sponsor 8">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor9.png' %}" alt="Sponsor 9">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor10.png' %}" alt="Sponsor 10">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor11.png' %}" alt="Sponsor 11">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor12.png' %}" alt="Sponsor 12">
+                    </div>
+                    <div class="sponsor-logo">
+                        <img src="{% static 'images/sponsors/sponsor13.png' %}" alt="Sponsor 13">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .competition-actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .carousel-section h2 {
+        margin-bottom: 20px;
+        color: var(--color-main);
+        text-align: center;
+    }
+
+    .competition-info {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .competition-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .sponsor-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 60px 20px 40px;
+    }
+
+    .sponsor-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    .sponsor-link img {
+        width: 250px;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    .sponsor-name {
+        font-size: 1.6rem;
+        text-align: center;
+        color: var(--color-light-gray);
+    }
+
+    .sponsor-link:hover .sponsor-name {
+        color: var(--color-light);
+    }
+
+    /* Carousel Navigation Arrows */
+    .carousel-nav {
+        background: none;
+        border: none;
+        color: var(--color-main);
+        font-size: 3rem;
+        cursor: pointer;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .carousel-nav:hover {
+        background-color: var(--color-dark);
+        color: var(--color-light);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-nav.prev {
+        left: -30px;
+    }
+
+    .carousel-nav.next {
+        right: -30px;
+    }
+
+    .carousel-nav i {
+        font-size: 2.5rem;
+    }
+</style>
+
+<script>
+function scrollToCompetitions() {
+    const windowHeight = window.innerHeight;
+    const targetScroll = windowHeight * 1.1; // Scroll down approximately 1.5 viewport heights
+    
+    window.scrollTo({
+        top: targetScroll,
+        behavior: 'smooth'
+    });
+}
+
+// Format prize pool numbers with commas
+document.addEventListener('DOMContentLoaded', function() {
+    const prizeAmounts = document.querySelectorAll('.prize-amount');
+    prizeAmounts.forEach(element => {
+        const amount = parseFloat(element.textContent.replace('$', ''));
+        element.textContent = '$' + new Intl.NumberFormat('en-US').format(amount);
+    });
+});
+
+// Add this to your existing script section or create a new one
+document.addEventListener('DOMContentLoaded', function() {
+    // Your existing animations and other scripts...
+});
+</script>
+{% endblock %} 

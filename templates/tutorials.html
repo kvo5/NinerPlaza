@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="tutorials-container">
+    <h1>Entrepreneurship Tutorials</h1>
+    <p class="tutorials-description">Learn from expert entrepreneurs and build your startup knowledge.</p>
+
+    <div class="tutorials-grid">
+        {% for tutorial in tutorials %}
+        <div class="tutorial-card">
+            <div class="video-container">
+                <iframe 
+                    src="https://www.youtube.com/embed/{{ tutorial.video_url|slice:'17:' }}"
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="tutorial-info">
+                <h3>{{ tutorial.title }}</h3>
+                <p>{{ tutorial.description }}</p>
+                {% if request.user.is_authenticated %}
+                <form action="{% url 'like-tutorial' tutorial.id %}" method="POST" class="like-form">
+                    {% csrf_token %}
+                    <button type="submit" class="like-btn {% if request.user in tutorial.likes.all %}liked{% endif %}">
+                        <i class="fas fa-heart"></i>
+                        <span>{{ tutorial.likes.count }}</span>
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 
